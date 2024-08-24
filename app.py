@@ -11,7 +11,7 @@ db = SQLAlchemy(app)
 
 app.app_context().push()
 
-class user(db.Model):
+class moneydata(db.Model):
     sno = db.Column(db.Integer, primary_key=True)
     data_type = db.Column(db.String(15), nullable=False)
     amount = db.Column(db.Integer)
@@ -19,6 +19,14 @@ class user(db.Model):
 
     def __repr__(self) -> str:
         return f"{self.sno}. {self.data_type} - {self.amount}"
+    
+class user(db.Model):
+    user_id = db.Column(db.Integer, primary_key=True)
+    uname = db.Column(db.String(30), nullable=False)
+    upass = db.Column(db.String(30), nullable=False)
+
+    def __repr__(self) -> str:
+        return f"{self.user_id}. {self.uname}"
 
 @app.route('/')
 def index():
