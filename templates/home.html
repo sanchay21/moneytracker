@@ -4,5 +4,21 @@
 {% endblock title %}
 
 {% block content %}
-    <p>Home</p>
+    Data:-  
+    <p>Hello, {{session['username']}}</p>
+    
+    <form method="POST" action="{{url_for('home')}}">
+        <input type="text" name="data_type" placeholder="Income or Expense"><br>
+        <input type="text" name="amount" placeholder="Enter Amount"><br>
+        <input type="text" name="desc" placeholder="Enter Description"><br>
+        <input type="submit" value="submit">
+    </form>
+
+    <div>
+        <p>All Money Data...</p>
+        {% for i in moneyData %}
+            <p>{{i.sno}}. {{i.data_type}} - {{i.amount}} {{i.desc}}</p>
+        {% endfor %}
+    </div>
+
 {% endblock content %}
