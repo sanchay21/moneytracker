@@ -12,6 +12,7 @@ db = SQLAlchemy(app)
 
 app.app_context().push()
 app.secret_key = 'the random string'
+
 class moneydata(db.Model):
     sno = db.Column(db.Integer, primary_key=True)
     data_type = db.Column(db.String(15), nullable=False)
@@ -51,9 +52,9 @@ def signup():
 
 @app.route('/home', methods=['GET', 'POST'])
 def home():
-    username=session['username']
-    password=session['password']
-    print(username)
+    
+    if session.get('username') is None:
+        return redirect('/')
 
     if request.method == 'POST':
         data_type=request.form['data_type']
@@ -65,11 +66,40 @@ def home():
     moneyData = moneydata.query.all()
     
     return render_template('home.html', moneyData=moneyData)
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
     
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        mydata=user.query.filter_by(uname=username).first()
+
+        if mydata is not None and mydata.upass == password:
+            session['username']=username
+            session['password']=password
+            return redirect('home')
+        else:
+            return "Incorret Username or Password"
+    else:
+        return render_template('login.html')
+
 @app.route('/showdata')
 def showdata(): 
     userData = user.query.all()
     return render_template('home.html', userData=userData)
+
+@app.route('/delete_data/<int:n>')
+def delete_data(n):
+    target_data = moneydata.query.filter_by(sno=n).first()
+    db.session.delete(target_data)
+    db.session.commit()
+    return redirect('/home')
+
+@app.route('/test/<int:n>')
+def test(n):
+    mydata=moneydata.query.filter_by(sno=n).first()
+    return f"{mydata.amount}"
 
 @app.route('/clear_session')
 def clear_sess():
