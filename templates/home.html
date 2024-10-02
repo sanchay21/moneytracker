@@ -4,6 +4,20 @@
 {% endblock title %}
 
 {% block content %} 
+    <style>
+        a:link, a:visited {
+            background-color: #f44336;
+            color: white;
+            padding: 7px 15px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        a:hover, a:active {
+            background-color: red;
+        }
+    </style>
     <p>Hello, {{session['username']}}</p>
     
     <form method="POST" action="{{url_for('home')}}">
@@ -18,7 +32,7 @@
         {% for i in moneyData %}
             <p>
                 {{i.sno}}. {{i.data_type}} - {{i.amount}} {{i.desc}}
-                 <a href="/delete_data/{{i.sno}}">Delete</a>
+                 <a href="/delete_data/{{i.sno}}" class="dlt_url">Delete</a>
             </p> 
         {% endfor %}
     </div>
